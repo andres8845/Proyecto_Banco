@@ -1,0 +1,46 @@
+services:
+  database:
+    image: jacobalberty/firebird:3.0.6
+    container_name: firebird_db
+    ports:
+      - "3050:3050"         # Puerto típico de Firebird
+    environment:
+      ISC_PASSWORD: masterkey        # Password de SYSDBA
+      FIREBIRD_DATABASE: banco.fdb   # Nombre del archivo de BD
+      FIREBIRD_USER: banco_user      # Usuario extra
+      FIREBIRD_PASSWORD: banco_pass  # Password de ese usuario
+    volumes:
+      - fb_data:/firebird/data       # Aquí se guarda la BD en un volumen
+
+  server:
+    build:
+      context: ./backend
+      dockerfile: DockerFile
+    container_name: backend
+    depends_on:
+      - database
+    ports:
+      - "3001:3001"                  # Backend accesible en localhost:3001
+    environment:
+      DB_HOST: database              # Nombre del servicio de la BD (Firebird)
+      DB_PORT: 3050                  # Puerto Firebird dentro del contenedor
+      DB_USER: banco_user            # Debe coincidir con FIREBIRD_USER
+      DB_PASSWORD: banco_pass        # Debe coincidir con FIREBIRD_PASSWORD
+      DB_NAME: /firebird/data/banco.fdb  # Ruta interna del archivo .fdb
+      PORT: 3001                     # Puerto en el que corre tu backend Node
+      JWT_SECRET: secreto
+    command: npm run dev             # O el script que uses para desarrollo
+
+  client:
+    build:
+      context: ./frontend
+      dockerfile: DockerFile
+    container_name: frontend
+    depends_on:
+      - server
+    ports:
+      - "3000:3000"                  # Frontend en localhost:3000
+    command: npm start               # CRA: npm start
+
+volumes:
+  fb_data:
