@@ -1,1 +1,13 @@
-[]
+[
+    {
+        "id_cliente": 1,
+        "nombre": "Kenny",
+        "apellido": "Menjivar",
+        "dni": "34234324432432234324",
+        "direccion": "Unitec, San Pedro Sula. Cortes",
+        "telefono": "+504 95959376",
+        "email": "kennyeche05@gmail.com",
+        "password": "8bb0cf6eb9b17d0f7d22b456f121257dc1254e1f01665370476383ea776df414",
+        "fecha_registro": "2025-11-17T17:35:58.491231"
+    }
+]

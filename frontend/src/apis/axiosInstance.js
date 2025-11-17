@@ -2,18 +2,20 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: "http://localhost:5001/api",
   withCredentials: true,
 });
 
-// ⬇️ ya lo tienes, lo dejamos
+// Interceptor para agregar el token de autorización
 instance.interceptors.request.use((config) => {
-  const t = localStorage.getItem("token");
-  if (t) config.headers.Authorization = `Bearer ${t}`;
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   return config;
 });
 
-// ⬇️ NUEVO: cache-buster y no-cache en todos los GET
+// Cache-buster para peticiones GET
 instance.interceptors.request.use((config) => {
   if ((config.method || "get").toLowerCase() === "get") {
     config.params = { ...(config.params || {}), _ts: Date.now() };
