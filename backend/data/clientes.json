@@ -9,5 +9,16 @@
         "email": "kennyeche05@gmail.com",
         "password": "8bb0cf6eb9b17d0f7d22b456f121257dc1254e1f01665370476383ea776df414",
         "fecha_registro": "2025-11-17T17:35:58.491231"
+    },
+    {
+        "id_cliente": 2,
+        "nombre": "Sandro",
+        "apellido": "Fernandez",
+        "dni": "1804200402712",
+        "direccion": "El progreso, Yoro",
+        "telefono": "96489003",
+        "email": "sandrofernandez@unitec.edu",
+        "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+        "fecha_registro": "2025-11-17T18:45:04.418089"
     }
 ]

@@ -21,3 +21,16 @@ build
 # Otros
 .DS_Store
 .vscode/
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore virtual environment
+venv/
+env/
+
+# Ignore environment variables files
+.env
