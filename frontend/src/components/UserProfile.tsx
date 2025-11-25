@@ -14,11 +14,16 @@ import {
   CreditCard, 
   Shield,
   Edit,
-  Camera
+  Camera,
+  LogOut
 } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export function UserProfile() {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState({
     firstName: "Juan",
@@ -36,6 +41,11 @@ export function UserProfile() {
 
   const handleInputChange = (field: string, value: string) => {
     setUserData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
   };
 
   return (
@@ -263,6 +273,25 @@ export function UserProfile() {
               </div>
             </div>
           </div>
+        </div>
+      </Card>
+
+      {/* Logout Section */}
+      <Card className="p-6 mt-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h3 className="text-lg font-semibold mb-1">Cerrar Sesión</h3>
+            <p className="text-sm text-gray-600">Sal de tu cuenta de forma segura</p>
+          </div>
+          <Button 
+            variant="destructive"
+            onClick={handleLogout}
+            size="lg"
+            className="bg-red-600 hover:bg-red-700 text-white font-medium px-6 py-3"
+          >
+            <LogOut className="h-5 w-5 mr-2" />
+            Cerrar Sesión
+          </Button>
         </div>
       </Card>
     </div>

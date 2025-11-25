@@ -1,1 +1,70 @@
-[]
+[
+    {
+        "id_cuenta": 1,
+        "id_cliente": 2,
+        "numero_cuenta": "6102012585735656",
+        "tipo_cuenta": "ahorro",
+        "saldo": 0.0,
+        "fecha_apertura": "2025-11-25T03:25:09.062317",
+        "estado": "activa",
+        "tasa_interes": 3.5,
+        "limite_retiros": 5,
+        "retiros_realizados": 1
+    },
+    {
+        "id_cuenta": 2,
+        "id_cliente": 2,
+        "numero_cuenta": "3491175612666869",
+        "tipo_cuenta": "ahorro",
+        "saldo": 0.0,
+        "fecha_apertura": "2025-11-25T03:28:25.566276",
+        "estado": "activa",
+        "tasa_interes": 3.5,
+        "limite_retiros": 5,
+        "retiros_realizados": 0
+    },
+    {
+        "id_cuenta": 3,
+        "id_cliente": 2,
+        "numero_cuenta": "5927240639803267",
+        "tipo_cuenta": "ahorro",
+        "saldo": 89.0,
+        "fecha_apertura": "2025-11-25T03:30:19.867713",
+        "estado": "activa",
+        "tasa_interes": 3.5,
+        "limite_retiros": 5,
+        "retiros_realizados": 0
+    },
+    {
+        "id_cuenta": 4,
+        "id_cliente": 2,
+        "numero_cuenta": "9002226259675941",
+        "tipo_cuenta": "corriente",
+        "saldo": 200.0,
+        "fecha_apertura": "2025-11-25T03:30:44.528057",
+        "estado": "activa",
+        "limite_descubierto": 0.0
+    },
+    {
+        "id_cuenta": 5,
+        "id_cliente": 2,
+        "numero_cuenta": "7322433536224478",
+        "tipo_cuenta": "corriente",
+        "saldo": 3100.0,
+        "fecha_apertura": "2025-11-25T03:33:49.745361",
+        "estado": "activa",
+        "limite_descubierto": 0.0
+    },
+    {
+        "id_cuenta": 6,
+        "id_cliente": 2,
+        "numero_cuenta": "1512034684049388",
+        "tipo_cuenta": "ahorro",
+        "saldo": 1000000.0,
+        "fecha_apertura": "2025-11-25T04:45:45.654595",
+        "estado": "activa",
+        "tasa_interes": 3.5,
+        "limite_retiros": 5,
+        "retiros_realizados": 0
+    }
+]

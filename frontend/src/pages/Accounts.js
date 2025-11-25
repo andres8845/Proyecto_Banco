@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../apis/axiosInstance';
+import accountService from '../apis/accountService';
 import Navbar from '../components/Navbar';
 import './Accounts.css';
 
@@ -18,11 +18,20 @@ const Accounts = () => {
 
   const fetchAccounts = async () => {
     try {
-      const response = await api.get('/accounts');
-      setAccounts(response.data.accounts || []);
+      const data = await accountService.getAllAccounts();
+      setAccounts(data.accounts || []);
       setLoading(false);
     } catch (error) {
       console.error('Error obteniendo cuentas:', error);
+      if (error.response) {
+        console.error('Respuesta del servidor:', error.response.data);
+        alert('Error: ' + (error.response.data.message || 'Error desconocido al obtener cuentas'));
+      } else if (error.request) {
+        console.error('No hubo respuesta del servidor:', error.request);
+        alert('No hubo respuesta del servidor al obtener cuentas');
+      } else {
+        alert('Error desconocido al obtener cuentas');
+      }
       setLoading(false);
     }
   };
@@ -30,13 +39,21 @@ const Accounts = () => {
   const handleCreateAccount = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/accounts', newAccount);
+      await accountService.createAccount(newAccount);
       setShowModal(false);
       setNewAccount({ tipo_cuenta: 'ahorro', saldo_inicial: 0 });
       fetchAccounts();
     } catch (error) {
       console.error('Error creando cuenta:', error);
-      alert('Error al crear la cuenta');
+      if (error.response) {
+        console.error('Respuesta del servidor:', error.response.data);
+        alert('Error: ' + (error.response.data.message || 'Error desconocido al crear cuenta'));
+      } else if (error.request) {
+        console.error('No hubo respuesta del servidor:', error.request);
+        alert('No hubo respuesta del servidor al crear cuenta');
+      } else {
+        alert('Error desconocido al crear cuenta');
+      }
     }
   };
 

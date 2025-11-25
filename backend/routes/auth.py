@@ -62,18 +62,28 @@ def login():
     """Inicio de sesión"""
     try:
         data = request.get_json()
+        print("\n" + "=" * 60)
+        print("🔵 LOGIN - Datos recibidos:", data)
         
         # Validar campos
         if not data.get('email') or not data.get('password'):
+            print("❌ Campos faltantes")
             return jsonify({'message': 'Email y contraseña son requeridos'}), 400
         
         # Buscar cliente
         cliente = Cliente.obtener_cliente_por_email(data['email'])
         if not cliente:
+            print(f"❌ Usuario no encontrado: {data['email']}")
             return jsonify({'message': 'Credenciales inválidas'}), 401
+        
+        print(f"✅ Usuario encontrado: {cliente['email']}")
+        print(f"🔑 Password enviado: {data['password']}")
+        print(f"🔑 Password hash almacenado: {cliente['password']}")
+        print(f"🔑 Password hash calculado: {hash_password(data['password'])}")
         
         # Verificar contraseña
         if not verify_password(data['password'], cliente['password']):
+            print("❌ Contraseña incorrecta")
             return jsonify({'message': 'Credenciales inválidas'}), 401
         
         # Generar token

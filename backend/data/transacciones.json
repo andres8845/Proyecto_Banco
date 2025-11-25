@@ -1,1 +1,12 @@
-[]
+[
+    {
+        "id_transaccion": 1,
+        "numero_cuenta_origen": "6102012585735656",
+        "numero_cuenta_destino": "7322433536224478",
+        "tipo_transaccion": "transferencia",
+        "monto": 100.0,
+        "fecha_hora": "2025-11-25T04:46:28.295794",
+        "descripcion": " ",
+        "estado": "completada"
+    }
+]

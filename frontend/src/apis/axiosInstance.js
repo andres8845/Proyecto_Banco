@@ -6,12 +6,16 @@ const instance = axios.create({
   withCredentials: true,
 });
 
-// Interceptor para agregar el token de autorización
+// Interceptor para agregar el token de autorización y mostrar logs
 instance.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+  // DEBUG: Mostrar token y headers en consola
+  console.log("[Axios] URL:", config.baseURL + config.url);
+  console.log("[Axios] Token:", token);
+  console.log("[Axios] Headers:", config.headers);
   return config;
 });
 

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import api from '../apis/axiosInstance';
+import dashboardService from '../apis/dashboardService';
+import accountService from '../apis/accountService';
+import transactionService from '../apis/transactionService';
 import Navbar from '../components/Navbar';
 import './Dashboard.css';
 
@@ -12,7 +14,9 @@ const Dashboard = () => {
   const [stats, setStats] = useState({
     totalBalance: 0,
     totalAccounts: 0,
-    recentTransactions: 0
+    recentTransactions: 0,
+    monthlyIncome: 0,
+    monthlyExpenses: 0
   });
 
   useEffect(() => {
@@ -21,25 +25,23 @@ const Dashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      const [accountsRes, transactionsRes] = await Promise.all([
-        api.get('/accounts'),
-        api.get('/transactions/recent')
+      // Usar los nuevos servicios para obtener datos
+      const [dashboardStats, accountsData, transactionsData] = await Promise.all([
+        dashboardService.getDashboardStats(),
+        accountService.getAllAccounts(),
+        transactionService.getRecentTransactions()
       ]);
 
-      setAccounts(accountsRes.data.accounts || []);
-      setTransactions(transactionsRes.data.transactions || []);
-
-      // Calcular estadísticas
-      const totalBalance = accountsRes.data.accounts?.reduce(
-        (sum, acc) => sum + parseFloat(acc.saldo || 0),
-        0
-      ) || 0;
-
       setStats({
-        totalBalance,
-        totalAccounts: accountsRes.data.accounts?.length || 0,
-        recentTransactions: transactionsRes.data.transactions?.length || 0
+        totalBalance: dashboardStats.total_balance || 0,
+        totalAccounts: dashboardStats.total_accounts || 0,
+        recentTransactions: dashboardStats.recent_transactions?.length || 0,
+        monthlyIncome: dashboardStats.monthly_income || 0,
+        monthlyExpenses: dashboardStats.monthly_expenses || 0
       });
+
+      setAccounts(accountsData.accounts || []);
+      setTransactions(transactionsData.transactions || []);
 
       setLoading(false);
     } catch (error) {

@@ -2,9 +2,21 @@
 
 Sistema bancario completo con arquitectura **Orientada a Objetos** usando **Python/Flask** en el backend y **React** en el frontend.
 
+## ✨ Estado del Proyecto
+
+**🎉 Backend y Frontend completamente integrados y funcionales**
+
+- ✅ Todos los endpoints del backend funcionando
+- ✅ Servicios API del frontend implementados
+- ✅ Autenticación JWT operativa
+- ✅ Sistema de transacciones completo
+- ✅ Dashboard con estadísticas en tiempo real
+- ✅ Analytics financieros implementados
+- ✅ Sistema de pagos funcionando
+
 ## 🎯 Características del Proyecto
 
-### Backend (Python)
+### Backend (Python/Flask)
 - ✅ **Arquitectura POO** con herencia y polimorfismo
 - ✅ Clase abstracta `Cuenta` con implementaciones `CuentaAhorro` y `CuentaCorriente`
 - ✅ **Operaciones bancarias**: Depósito, Retiro, Transferencia
@@ -12,14 +24,21 @@ Sistema bancario completo con arquitectura **Orientada a Objetos** usando **Pyth
 - ✅ **Sobregiro** para cuentas corrientes
 - ✅ **Autenticación JWT** con tokens
 - ✅ **Base de datos en archivos JSON**
+- ✅ **Sistema de pagos** con categorías
+- ✅ **Analytics financieros** con análisis por período
+- ✅ **Dashboard stats** completo
 
 ### Frontend (React)
 - ✅ Sistema de autenticación (Login/Register)
-- ✅ Dashboard con resumen financiero
-- ✅ Gestión de cuentas
-- ✅ Historial de transacciones
-- ✅ Sistema de transferencias
+- ✅ Dashboard con resumen financiero y estadísticas
+- ✅ Gestión completa de cuentas
+- ✅ Historial de transacciones con filtros
+- ✅ Sistema de transferencias entre cuentas
+- ✅ Depósitos y retiros
+- ✅ Sistema de pagos de servicios
+- ✅ Analytics financieros con gráficas
 - ✅ Diseño moderno y responsivo
+- ✅ **Servicios API centralizados**
 
 ## 📁 Estructura del Proyecto
 
@@ -35,24 +54,32 @@ Proyecto_Banco/
 │   │   ├── Cuenta.py          # Clase abstracta + CuentaAhorro + CuentaCorriente
 │   │   └── Transaccion.py
 │   ├── routes/                 # API Routes
-│   │   ├── auth.py
-│   │   ├── accounts.py
-│   │   ├── transactions.py
-│   │   └── operations.py
+│   │   ├── auth.py            # Autenticación
+│   │   ├── accounts.py        # Gestión de cuentas
+│   │   ├── transactions.py    # Transacciones
+│   │   ├── operations.py      # Operaciones especiales
+│   │   ├── dashboard.py       # Dashboard & Analytics (NUEVO)
+│   │   └── payments.py        # Sistema de pagos (NUEVO)
 │   ├── utils/                  # Utilidades
 │   │   ├── auth.py            # JWT y passwords
 │   │   └── file_manager.py    # Manejo de JSON
 │   ├── app.py                  # Aplicación principal
 │   ├── initFiles.py
-│   ├── test_poo.py            # Script de prueba
+│   ├── test_poo.py            # Script de prueba POO
+│   ├── test_integration.py    # Script de prueba integración (NUEVO)
 │   ├── requirements.txt
 │   ├── README_BACKEND.md
 │   └── ARQUITECTURA_POO.md    # Documentación técnica
 │
 ├── frontend/                   # Frontend React
 │   ├── src/
-│   │   ├── apis/
-│   │   │   └── axiosInstance.js
+│   │   ├── apis/              # Servicios API (ACTUALIZADOS)
+│   │   │   ├── axiosInstance.js
+│   │   │   ├── accountService.js      # NUEVO
+│   │   │   ├── transactionService.js  # NUEVO
+│   │   │   ├── dashboardService.js    # NUEVO
+│   │   │   ├── paymentService.js      # NUEVO
+│   │   │   └── index.js              # NUEVO
 │   │   ├── components/
 │   │   │   ├── Login.js
 │   │   │   ├── Register.js
@@ -61,16 +88,20 @@ Proyecto_Banco/
 │   │   ├── context/
 │   │   │   └── AuthContext.js
 │   │   ├── pages/
-│   │   │   ├── Dashboard.js
-│   │   │   ├── Accounts.js
-│   │   │   ├── Transactions.js
-│   │   │   └── Transfer.js
+│   │   │   ├── Dashboard.js          # ACTUALIZADO
+│   │   │   ├── Accounts.js           # ACTUALIZADO
+│   │   │   ├── Transactions.js       # ACTUALIZADO
+│   │   │   ├── Transfer.js           # ACTUALIZADO
+│   │   │   ├── Deposit.js            # NUEVO
+│   │   │   └── Withdraw.js           # NUEVO
 │   │   ├── App.js
 │   │   └── index.js
 │   ├── package.json
 │   └── README_FRONTEND.md
 │
-└── docker-compose.yml
+├── docker-compose.yml
+├── INTEGRATION_GUIDE.md        # Guía de integración (NUEVO)
+└── INTEGRATION_SUMMARY.md      # Resumen de la integración (NUEVO)
 ```
 
 ## 🏛️ Arquitectura POO
@@ -125,6 +156,11 @@ interes = cuenta_ahorro.calcular_interes()
 
 ## 🚀 Instalación y Ejecución
 
+### Requisitos Previos
+- Python 3.8+
+- Node.js 14+
+- npm o yarn
+
 ### Backend
 
 1. Instalar dependencias:
@@ -138,7 +174,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-El backend estará en `http://localhost:5000`
+El backend estará en `http://localhost:5001`
 
 ### Frontend
 
@@ -155,34 +191,54 @@ npm start
 
 El frontend estará en `http://localhost:3000`
 
+### Verificar Integración
+
+Ejecutar el script de verificación:
+```bash
+cd backend
+python test_integration.py
+```
+
 ## 📡 API Endpoints
 
-### Autenticación
-- `POST /api/auth/register` - Registrar usuario
-- `POST /api/auth/login` - Iniciar sesión
-- `GET /api/auth/me` - Obtener usuario actual
+### Autenticación (`/api/auth`)
+- `POST /register` - Registrar usuario
+- `POST /login` - Iniciar sesión
+- `GET /me` - Obtener usuario actual
 
-### Cuentas
-- `GET /api/accounts` - Listar cuentas del usuario
-- `POST /api/accounts` - Crear nueva cuenta
-- `GET /api/accounts/<numero>` - Ver cuenta específica
+### Cuentas (`/api/accounts`)
+- `GET /` - Listar cuentas del usuario
+- `POST /` - Crear nueva cuenta
+- `GET /<numero>` - Ver cuenta por número
+- `GET /id/<id>` - Ver cuenta por ID ⭐ NUEVO
+- `GET /stats` - Estadísticas de cuentas ⭐ NUEVO
 
-### Transacciones
-- `GET /api/transactions` - Listar transacciones
-- `GET /api/transactions/recent` - Últimas transacciones
-- `POST /api/transactions/transfer` - Transferir dinero
-- `POST /api/transactions/deposit` - Depositar
-- `POST /api/transactions/withdraw` - Retirar
+### Transacciones (`/api/transactions`)
+- `GET /` - Listar transacciones
+- `GET /recent` - Últimas 10 transacciones
+- `GET /by-account/<numero>` - Por cuenta ⭐ NUEVO
+- `POST /transfer` - Transferir dinero
+- `POST /deposit` - Depositar
+- `POST /withdraw` - Retirar
+- `GET /stats` - Estadísticas ⭐ NUEVO
 
-### Operaciones Especiales
-- `POST /api/operations/calculate-interest` - Calcular interés (ahorro)
-- `POST /api/operations/reset-withdrawal-limit` - Reiniciar límite de retiros
-- `GET /api/operations/overdraft-status/<numero>` - Estado de sobregiro
+### Dashboard (`/api/dashboard`) ⭐ NUEVO
+- `GET /stats` - Estadísticas generales
+- `GET /analytics?period=<period>` - Análisis financiero
+- `GET /summary` - Resumen completo
+
+### Pagos (`/api/payments`) ⭐ NUEVO
+- `POST /process` - Procesar pago
+- `GET /history` - Historial de pagos
+- `GET /categories` - Categorías disponibles
+
+### Operaciones Especiales (`/api/operations`)
+- `POST /calculate-interest` - Calcular interés (ahorro)
+- `POST /reset-withdrawal-limit` - Reiniciar límite de retiros
 
 ## 🧪 Pruebas
 
-Ejecutar el script de prueba del backend:
-
+### Prueba POO del Backend
 ```bash
 cd backend
 python test_poo.py
@@ -197,6 +253,21 @@ Este script prueba:
 - ✅ Transferencias entre cuentas
 - ✅ Cálculo de intereses
 
+### Prueba de Integración
+```bash
+cd backend
+python test_integration.py
+```
+
+Este script verifica:
+- ✅ Servidor funcionando
+- ✅ Registro de usuarios
+- ✅ Creación de cuentas
+- ✅ Depósitos
+- ✅ Dashboard stats
+- ✅ Analytics
+- ✅ Categorías de pago
+
 ## 💾 Base de Datos (JSON)
 
 El sistema usa archivos JSON para persistencia:
@@ -210,7 +281,7 @@ El sistema usa archivos JSON para persistencia:
     "apellido": "Pérez",
     "dni": "0801199012345",
     "email": "juan@email.com",
-    "password": "hash_sha256",
+    "password": "hash_bcrypt",
     "fecha_registro": "2024-11-17T10:30:00"
   }
 ]

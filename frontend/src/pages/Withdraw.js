@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import accountService from '../apis/accountService';
 import transactionService from '../apis/transactionService';
 import Navbar from '../components/Navbar';
-import './Transfer.css';
+import './Transfer.css'; // Reutilizar estilos similares
 
-const Transfer = () => {
+const Withdraw = () => {
   const [accounts, setAccounts] = useState([]);
   const [formData, setFormData] = useState({
-    cuenta_origen: '',
-    cuenta_destino: '',
+    numero_cuenta: '',
     monto: '',
     descripcion: ''
   });
@@ -39,13 +38,8 @@ const Transfer = () => {
     e.preventDefault();
     setMessage({ type: '', text: '' });
 
-    if (!formData.cuenta_origen || !formData.cuenta_destino) {
-      setMessage({ type: 'error', text: 'Debes seleccionar ambas cuentas' });
-      return;
-    }
-
-    if (formData.cuenta_origen === formData.cuenta_destino) {
-      setMessage({ type: 'error', text: 'No puedes transferir a la misma cuenta' });
+    if (!formData.numero_cuenta) {
+      setMessage({ type: 'error', text: 'Debes seleccionar una cuenta' });
       return;
     }
 
@@ -54,26 +48,32 @@ const Transfer = () => {
       return;
     }
 
+    // Validar saldo disponible
+    const selectedAccount = accounts.find(acc => acc.numero_cuenta === formData.numero_cuenta);
+    if (selectedAccount && parseFloat(formData.monto) > parseFloat(selectedAccount.saldo)) {
+      setMessage({ type: 'error', text: 'Saldo insuficiente' });
+      return;
+    }
+
     setLoading(true);
 
     try {
-      await transactionService.transfer({
+      await transactionService.withdraw({
         ...formData,
         monto: parseFloat(formData.monto)
       });
 
-      setMessage({ type: 'success', text: 'Transferencia realizada exitosamente' });
+      setMessage({ type: 'success', text: 'Retiro realizado exitosamente' });
       setFormData({
-        cuenta_origen: '',
-        cuenta_destino: '',
+        numero_cuenta: '',
         monto: '',
         descripcion: ''
       });
-      fetchAccounts(); // Actualizar balances
+      fetchAccounts();
     } catch (error) {
       setMessage({
         type: 'error',
-        text: error.response?.data?.message || 'Error al realizar la transferencia'
+        text: error.response?.data?.message || 'Error al realizar el retiro'
       });
     }
 
@@ -85,8 +85,8 @@ const Transfer = () => {
       <Navbar />
       <div className="transfer-container">
         <div className="transfer-card">
-          <h1>Realizar Transferencia</h1>
-          <p className="transfer-subtitle">Transfiere dinero entre tus cuentas o a otras cuentas</p>
+          <h1>Realizar Retiro</h1>
+          <p className="transfer-subtitle">Retira dinero de una de tus cuentas</p>
 
           {message.text && (
             <div className={`message ${message.type}`}>{message.text}</div>
@@ -94,69 +94,60 @@ const Transfer = () => {
 
           <form onSubmit={handleSubmit} className="transfer-form">
             <div className="form-group">
-              <label htmlFor="cuenta_origen">Cuenta de Origen</label>
+              <label htmlFor="numero_cuenta">Cuenta de Origen</label>
               <select
-                id="cuenta_origen"
-                name="cuenta_origen"
-                value={formData.cuenta_origen}
+                id="numero_cuenta"
+                name="numero_cuenta"
+                value={formData.numero_cuenta}
                 onChange={handleChange}
                 required
                 disabled={loading}
               >
                 <option value="">Selecciona una cuenta</option>
                 {accounts.map((account) => (
-                  <option key={account.id} value={account.numero_cuenta}>
-                    {account.tipo_cuenta} - ****{account.numero_cuenta.slice(-4)} (L. {parseFloat(account.saldo).toFixed(2)})
+                  <option key={account.numero_cuenta} value={account.numero_cuenta}>
+                    {account.tipo_cuenta} - ****{account.numero_cuenta?.slice(-4)} 
+                    (L. {parseFloat(account.saldo).toFixed(2)})
                   </option>
                 ))}
               </select>
             </div>
 
             <div className="form-group">
-              <label htmlFor="cuenta_destino">Cuenta de Destino</label>
-              <input
-                id="cuenta_destino"
-                name="cuenta_destino"
-                type="text"
-                value={formData.cuenta_destino}
-                onChange={handleChange}
-                required
-                placeholder="Número de cuenta destino"
-                disabled={loading}
-              />
-            </div>
-
-            <div className="form-group">
               <label htmlFor="monto">Monto</label>
               <input
+                type="number"
                 id="monto"
                 name="monto"
-                type="number"
-                min="0.01"
-                step="0.01"
                 value={formData.monto}
                 onChange={handleChange}
-                required
                 placeholder="0.00"
+                step="0.01"
+                min="0.01"
+                required
                 disabled={loading}
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="descripcion">Descripción (opcional)</label>
+              <label htmlFor="descripcion">Descripción (Opcional)</label>
               <textarea
                 id="descripcion"
                 name="descripcion"
                 value={formData.descripcion}
                 onChange={handleChange}
-                placeholder="Concepto de la transferencia"
-                rows="3"
+                placeholder="Escribe una nota sobre este retiro"
                 disabled={loading}
+                rows="3"
               />
             </div>
 
-            <button type="submit" className="btn btn-primary" disabled={loading}>
-              {loading ? 'Procesando...' : 'Realizar Transferencia'}
+            <button 
+              type="submit" 
+              className="btn btn-primary btn-block"
+              disabled={loading}
+            >
+              {loading ? 'Procesando...' : 'Realizar Retiro'}
             </button>
           </form>
         </div>
@@ -165,4 +156,4 @@ const Transfer = () => {
   );
 };
 
-export default Transfer;
+export default Withdraw;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../apis/axiosInstance';
+import transactionService from '../apis/transactionService';
 import Navbar from '../components/Navbar';
 import './Transactions.css';
 
@@ -14,8 +14,8 @@ const Transactions = () => {
 
   const fetchTransactions = async () => {
     try {
-      const response = await api.get('/transactions');
-      setTransactions(response.data.transactions || []);
+      const data = await transactionService.getAllTransactions();
+      setTransactions(data.transactions || []);
       setLoading(false);
     } catch (error) {
       console.error('Error obteniendo transacciones:', error);
