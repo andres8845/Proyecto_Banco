@@ -1,11 +1,17 @@
-FROM node:20-alpine
+FROM python:3.11-slim
 
+# Establece el directorio de trabajo
 WORKDIR /app
 
-ENV DEV_MODE=true
-EXPOSE 3001
+# Copia los archivos de requerimientos e instálalos
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . ./
-RUN npm install
+# Copia el resto del código
+COPY . .
 
-CMD ["npm", "run", "dev"]
+# Expone el puerto donde corre Flask
+EXPOSE 5001
+
+# Comando para iniciar el backend Flask
+CMD ["python", "app.py"]

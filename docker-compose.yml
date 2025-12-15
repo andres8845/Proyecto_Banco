@@ -29,7 +29,7 @@ services:
       DB_NAME: /firebird/data/banco.fdb  # Ruta interna del archivo .fdb
       PORT: 3001                     # Puerto en el que corre tu backend Node
       JWT_SECRET: secreto
-    command: npm run dev             # O el script que uses para desarrollo
+    command: python app.py           # Ejecuta el backend Flask
 
   client:
     build:
