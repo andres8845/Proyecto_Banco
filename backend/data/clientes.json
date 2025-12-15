@@ -20,5 +20,16 @@
         "email": "sandrofernandez@unitec.edu",
         "password": "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f",
         "fecha_registro": "2025-11-17T18:45:04.418089"
+    },
+    {
+        "id_cliente": 3,
+        "nombre": "JOSUE",
+        "apellido": "MELGAE FUNEZ",
+        "dni": "0303030345342",
+        "direccion": "sandrofernandez@unitec.edu",
+        "telefono": "+50487676533",
+        "email": "kennyeche05@Unitec.edu",
+        "password": "15e2b0d3c33891ebb0f1ef609ec419420c20e320ce94c65fbc8c3312448eb225",
+        "fecha_registro": "2025-12-15T15:35:20.279797"
     }
 ]

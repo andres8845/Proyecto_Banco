@@ -18,5 +18,35 @@
         "fecha_hora": "2025-12-15T15:27:10.093290",
         "descripcion": "",
         "estado": "completada"
+    },
+    {
+        "id_transaccion": 3,
+        "numero_cuenta_origen": "6975802176633282",
+        "numero_cuenta_destino": "7322433536224478",
+        "tipo_transaccion": "transferencia",
+        "monto": 200.0,
+        "fecha_hora": "2025-12-15T15:36:10.152975",
+        "descripcion": "",
+        "estado": "completada"
+    },
+    {
+        "id_transaccion": 4,
+        "numero_cuenta_origen": "6975802176633282",
+        "numero_cuenta_destino": "6102012585735656",
+        "tipo_transaccion": "transferencia",
+        "monto": 299.99,
+        "fecha_hora": "2025-12-15T15:46:23.663493",
+        "descripcion": "",
+        "estado": "completada"
+    },
+    {
+        "id_transaccion": 5,
+        "numero_cuenta_origen": "4360432757685890",
+        "numero_cuenta_destino": "6975802176633282",
+        "tipo_transaccion": "transferencia",
+        "monto": 350.0,
+        "fecha_hora": "2025-12-15T16:05:02.373438",
+        "descripcion": "",
+        "estado": "completada"
     }
 ]

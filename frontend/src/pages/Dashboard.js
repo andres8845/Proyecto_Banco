@@ -126,23 +126,51 @@ const Dashboard = () => {
               <p className="empty-message">No hay transacciones recientes.</p>
             ) : (
               <div className="transactions-list">
-                {transactions.slice(0, 5).map((transaction) => (
-                  <div key={transaction.id} className="transaction-item">
-                    <div className="transaction-icon">
-                      {transaction.tipo_transaccion === 'deposito' ? '⬇️' : '⬆️'}
-                    </div>
-                    <div className="transaction-details">
-                      <p className="transaction-type">{transaction.tipo_transaccion}</p>
-                      <p className="transaction-date">
-                        {new Date(transaction.fecha_hora).toLocaleDateString()}
+                {transactions.slice(0, 5).map((transaction) => {
+                  // Obtener las cuentas del usuario para comparar
+                  const misCuentas = accounts.map(acc => acc.numero_cuenta);
+                  
+                  // Determinar si es ingreso o egreso
+                  let esIngreso = false;
+                  let tipoMostrar = transaction.tipo_transaccion;
+                  
+                  if (transaction.tipo_transaccion === 'deposito') {
+                    esIngreso = true;
+                    tipoMostrar = 'Depósito';
+                  } else if (transaction.tipo_transaccion === 'retiro') {
+                    esIngreso = false;
+                    tipoMostrar = 'Retiro';
+                  } else if (transaction.tipo_transaccion === 'transferencia_recibida') {
+                    esIngreso = true;
+                    tipoMostrar = 'Transferencia recibida';
+                  } else if (transaction.tipo_transaccion === 'transferencia_enviada') {
+                    esIngreso = false;
+                    tipoMostrar = 'Transferencia enviada';
+                  } else if (transaction.tipo_transaccion === 'transferencia') {
+                    // Para transferencias antiguas, verificar si es recibida o enviada
+                    // Si la cuenta destino es mía, es recibida
+                    esIngreso = misCuentas.includes(transaction.numero_cuenta_destino);
+                    tipoMostrar = esIngreso ? 'Transferencia recibida' : 'Transferencia enviada';
+                  }
+                  
+                  return (
+                    <div key={transaction.id} className="transaction-item">
+                      <div className="transaction-icon">
+                        {esIngreso ? '⬇️' : '⬆️'}
+                      </div>
+                      <div className="transaction-details">
+                        <p className="transaction-type">{tipoMostrar}</p>
+                        <p className="transaction-date">
+                          {new Date(transaction.fecha_hora).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <p className={`transaction-amount ${esIngreso ? 'deposito' : 'retiro'}`}>
+                        {esIngreso ? '+' : '-'}
+                        L. {parseFloat(transaction.monto).toFixed(2)}
                       </p>
                     </div>
-                    <p className={`transaction-amount ${transaction.tipo_transaccion}`}>
-                      {transaction.tipo_transaccion === 'deposito' ? '+' : '-'}
-                      L. {parseFloat(transaction.monto).toFixed(2)}
-                    </p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>

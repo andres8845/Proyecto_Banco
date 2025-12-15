@@ -116,19 +116,52 @@ class Transaccion:
             Transaccion._guardar_cuenta(cuenta_destino, cuenta_destino_data)
         
         # Crear registro de transacción
-        transaccion_data = {
-            'id_transaccion': get_next_id('transacciones.json', 'id_transaccion'),
-            'numero_cuenta_origen': numero_cuenta_origen,
-            'numero_cuenta_destino': numero_cuenta_destino,
-            'tipo_transaccion': tipo,
-            'monto': float(monto),
-            'fecha_hora': datetime.now().isoformat(),
-            'descripcion': descripcion,
-            'estado': 'completada'
-        }
+        fecha_hora = datetime.now().isoformat()
         
-        add_item('transacciones.json', transaccion_data)
-        return transaccion_data, None
+        # Para transferencias, crear dos registros (uno para cada cuenta)
+        if tipo == 'transferencia':
+            # Registro para cuenta origen (débito)
+            transaccion_origen = {
+                'id_transaccion': get_next_id('transacciones.json', 'id_transaccion'),
+                'numero_cuenta_origen': numero_cuenta_origen,
+                'numero_cuenta_destino': numero_cuenta_destino,
+                'tipo_transaccion': 'transferencia_enviada',
+                'monto': float(monto),
+                'fecha_hora': fecha_hora,
+                'descripcion': descripcion or f'Transferencia a {numero_cuenta_destino}',
+                'estado': 'completada'
+            }
+            add_item('transacciones.json', transaccion_origen)
+            
+            # Registro para cuenta destino (crédito)
+            transaccion_destino = {
+                'id_transaccion': get_next_id('transacciones.json', 'id_transaccion'),
+                'numero_cuenta_origen': numero_cuenta_destino,
+                'numero_cuenta_destino': numero_cuenta_origen,
+                'tipo_transaccion': 'transferencia_recibida',
+                'monto': float(monto),
+                'fecha_hora': fecha_hora,
+                'descripcion': descripcion or f'Transferencia de {numero_cuenta_origen}',
+                'estado': 'completada'
+            }
+            add_item('transacciones.json', transaccion_destino)
+            
+            return transaccion_origen, None
+        else:
+            # Para depósitos y retiros, un solo registro
+            transaccion_data = {
+                'id_transaccion': get_next_id('transacciones.json', 'id_transaccion'),
+                'numero_cuenta_origen': numero_cuenta_origen,
+                'numero_cuenta_destino': numero_cuenta_destino,
+                'tipo_transaccion': tipo,
+                'monto': float(monto),
+                'fecha_hora': fecha_hora,
+                'descripcion': descripcion,
+                'estado': 'completada'
+            }
+            
+            add_item('transacciones.json', transaccion_data)
+            return transaccion_data, None
     
     @staticmethod
     def obtener_transacciones_por_cuenta(numero_cuenta):
